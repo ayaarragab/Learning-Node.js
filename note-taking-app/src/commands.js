@@ -1,5 +1,7 @@
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+import * as noteThings from './notes';
+
 
 yargs(hideBin(process.argv))
   .command('new <note>', 'create a new note', yargs => {
@@ -8,7 +10,9 @@ yargs(hideBin(process.argv))
       type: 'string'
     })
   }, async (argv) => {
-    
+    const tags = argv.tags ? argv.tags.split(',') : [];
+    const note = await noteThings.newNote(argv.note, tags);
+    console.log('New Note! ', note);
   })
   .option('tags', {
     alias: 't',
