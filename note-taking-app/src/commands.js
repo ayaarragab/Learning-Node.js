@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import * as noteThings from './notes';
+import * as noteThings from './notes.js';
 
 
 yargs(hideBin(process.argv))
