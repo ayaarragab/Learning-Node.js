@@ -60,7 +60,8 @@ yargs(hideBin(process.argv))
   }, async (argv) => {
   })
   .command('clean', 'remove all notes', () => {}, async (argv) => {
-    
+    await noteThings.removeAllNotes();
+    console.log("All notes deleted");
   })
   .demandCommand(1)
   .parse()

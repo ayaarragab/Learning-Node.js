@@ -45,4 +45,4 @@ export const removeNote = async id => {
     }
 }
 
-const removeAllNotes = () => saveDB({notes:[]}) // I don't have code after it so we can let it blocking as it won't matter
+export const removeAllNotes = () => saveDB({notes:[]}) // I don't have code after it so we can let it blocking as it won't matter
