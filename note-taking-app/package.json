@@ -1,10 +1,9 @@
 {
-  "name": "intro-nodejs",
+  "name": "note-taking-cli",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "bin": {
-    "note": "./index.js"
+    "note": "index.js"
   },
   "type": "module",
   "scripts": {
@@ -12,5 +11,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {},
+  "description": ""
 }

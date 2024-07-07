@@ -3,4 +3,4 @@
 ## This repository documents my Node.js learning journey
 
 ### Directories
-| 0.Note-taking-CLI | [./note-taking-CLI](./note-taking-CLI/) |
+| 0.Note-taking-app | [./note-taking-app](./note-taking-app/) |
