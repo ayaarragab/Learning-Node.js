@@ -1,18 +1,3 @@
 {
-  "notes": [
-    {
-      "content": "hello",
-      "id": 1720371321773,
-      "tags": [
-        "a",
-        "t",
-        "s"
-      ]
-    },
-    {
-      "content": "I am so happy that I made this CLI",
-      "id": 1720371374074,
-      "tags": []
-    }
-  ]
+  "notes": []
 }
