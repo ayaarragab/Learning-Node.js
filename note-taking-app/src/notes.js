@@ -6,6 +6,7 @@ export const newNote = async (note, tags = []) => {
         id: Date.now(),
         tags,
     }
+    console.log(note);
     await appendDB(newNote);
     return newNote;
 }

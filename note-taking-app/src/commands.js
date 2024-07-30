@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import * as noteThings from './notes.js';
-
+import {start} from './server.js';
 
 const listNotes = (notes) => {
   notes.forEach(({id, content, tags}) => {
@@ -62,6 +62,18 @@ yargs(hideBin(process.argv))
   .command('clean', 'remove all notes', () => {}, async (argv) => {
     await noteThings.removeAllNotes();
     console.log("All notes deleted");
+  })
+  .command('web [port]', 'launch website to see notes', yargs => {
+    return yargs
+      .positional('port', {
+        describe: 'port to bind on',
+        default: 5000,
+        type: 'number'
+      })
+  }, async (argv) => {
+    const notes = await noteThings.getAll()
+    console.log(notes);
+    start(argv.port, notes)
   })
   .demandCommand(1)
   .parse()
