@@ -14,3 +14,17 @@ beforeEach(() => {
   getDB.mockClear();
   saveDB.mockClear();
 })
+
+test('newNote added data and returned it', async () => {
+    const note = 'testing';
+    const tags = ['tag1', 'tag2'];
+    const id = Date.now();
+    const data = {
+        tags,
+        content: note,
+        id,
+    };
+    appendDB.mockResolvedValue(data);
+    const actualResult = await newNote(note, tags, id);
+    expect(actualResult).toEqual(data)
+})
