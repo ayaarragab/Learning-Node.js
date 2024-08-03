@@ -1,0 +1,15 @@
+#!/bin/bash
+# start mongo
+sudo systemctl start mongod
+
+# stop mongo
+sudo systemctl stop mongod
+
+#reload mongo
+sudo systemctl daemon-reload
+
+#mongo status
+sudo systemctl status mongod
+
+# start mongo in terminal
+mongosh

@@ -1,0 +1,7 @@
+#!/bin/bash
+# creates and uses db
+use learningMongo
+# show databases
+show databases
+# show collections (tables)
+show collections
