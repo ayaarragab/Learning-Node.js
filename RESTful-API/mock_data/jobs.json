@@ -1,0 +1,48 @@
+[
+    {
+      "title": "Software Engineer",
+      "description": "Develop and maintain web applications.",
+      "requirements": "Bachelor's degree in Computer Science or related field. 2+ years of experience in software development.",
+      "location": "San Francisco, CA",
+      "salary": 120000,
+      "postedDate": "2024-08-04T00:00:00.000Z",
+      "company": "64d6a5c5e2b8a246a57d2a90"
+    },
+    {
+      "title": "Product Manager",
+      "description": "Lead product development teams and define product strategy.",
+      "requirements": "Bachelor's degree in Business or related field. 3+ years of experience in product management.",
+      "location": "New York, NY",
+      "salary": 130000,
+      "postedDate": "2024-07-30T00:00:00.000Z",
+      "company": "64d6a5c5e2b8a246a57d2a91"
+    },
+    {
+      "title": "Data Analyst",
+      "description": "Analyze data to help make business decisions.",
+      "requirements": "Bachelor's degree in Statistics, Mathematics, or related field. 1+ year of experience in data analysis.",
+      "location": "Austin, TX",
+      "salary": 85000,
+      "postedDate": "2024-07-15T00:00:00.000Z",
+      "company": "64d6a5c5e2b8a246a57d2a92"
+    },
+    {
+      "title": "UX Designer",
+      "description": "Design user-friendly interfaces for web and mobile applications.",
+      "requirements": "Bachelor's degree in Design or related field. 2+ years of experience in UX design.",
+      "location": "Remote",
+      "salary": 95000,
+      "postedDate": "2024-06-20T00:00:00.000Z",
+      "company": "64d6a5c5e2b8a246a57d2a93"
+    },
+    {
+      "title": "DevOps Engineer",
+      "description": "Manage and automate deployment processes.",
+      "requirements": "Bachelor's degree in Computer Science or related field. 3+ years of experience in DevOps.",
+      "location": "Seattle, WA",
+      "salary": 115000,
+      "postedDate": "2024-08-01T00:00:00.000Z",
+      "company": "64d6a5c5e2b8a246a57d2a94"
+    }
+  ]
+  

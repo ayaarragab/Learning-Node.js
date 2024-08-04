@@ -1,0 +1,48 @@
+[
+    {
+      "applicantName": "John Doe",
+      "applicantEmail": "johndoe@example.com",
+      "resume": "https://example.com/resume/johndoe.pdf",
+      "coverLetter": "I am excited to apply for the Software Engineer position...",
+      "appliedDate": "2024-08-04T10:30:00.000Z",
+      "job": "64d6a5c5e2b8a246a57d2a90",
+      "status": "pending"
+    },
+    {
+      "applicantName": "Jane Smith",
+      "applicantEmail": "janesmith@example.com",
+      "resume": "https://example.com/resume/janesmith.pdf",
+      "coverLetter": "With a strong background in product management...",
+      "appliedDate": "2024-08-01T09:00:00.000Z",
+      "job": "64d6a5c5e2b8a246a57d2a91",
+      "status": "reviewed"
+    },
+    {
+      "applicantName": "Michael Brown",
+      "applicantEmail": "michaelbrown@example.com",
+      "resume": "https://example.com/resume/michaelbrown.pdf",
+      "coverLetter": "I am interested in the Data Analyst position...",
+      "appliedDate": "2024-07-20T14:45:00.000Z",
+      "job": "64d6a5c5e2b8a246a57d2a92",
+      "status": "accepted"
+    },
+    {
+      "applicantName": "Emily Davis",
+      "applicantEmail": "emilydavis@example.com",
+      "resume": "https://example.com/resume/emilydavis.pdf",
+      "coverLetter": "My experience in UX design would be a great fit for your team...",
+      "appliedDate": "2024-06-25T11:15:00.000Z",
+      "job": "64d6a5c5e2b8a246a57d2a93",
+      "status": "rejected"
+    },
+    {
+      "applicantName": "David Wilson",
+      "applicantEmail": "davidwilson@example.com",
+      "resume": "https://example.com/resume/davidwilson.pdf",
+      "coverLetter": "I am confident that my skills in DevOps...",
+      "appliedDate": "2024-08-03T13:25:00.000Z",
+      "job": "64d6a5c5e2b8a246a57d2a94",
+      "status": "pending"
+    }
+  ]
+  
