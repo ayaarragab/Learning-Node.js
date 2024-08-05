@@ -3,6 +3,7 @@ import path from 'path';
 import router from "./routers.js";
 import morgan from "morgan"; // useful middleware
 import cors from "cors";
+import {protect} from "./modules/auth/auth.js";
 
 const app = express();
 
@@ -40,7 +41,7 @@ app.get('/', (req, res) => {
 
 // app.use() allows you to apply global configurations either on a specific path or on the entire app
 
-app.use('/api', router); // not a middleware, concatenated '/api' to be first in all paths strings
+app.use('/api', protect ,router); // not a middleware, concatenated '/api' to be first in all paths strings
 
 /**
  * app.get("/todo/:id", mymiddleware1, mymiddleware2, handler);
