@@ -1,3 +1,4 @@
 /node_modules
 .env
 /mock_data
+put_data.js

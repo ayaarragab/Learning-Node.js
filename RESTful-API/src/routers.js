@@ -1,4 +1,6 @@
 import Router from "express";
+import User from "../models/user.js";
+import { json } from "node:stream/consumers";
 
 const router = Router();
 
@@ -6,10 +8,26 @@ const router = Router();
  * Users routes
  */
 router.route('/users')
-    .get((request, response) => response.json({ message: "Hello from users" }))
-    .post((request, response) => {
-        // Handle creating a user
-        response.json({ message: "User created" });
+    .get(async (request, response) => {
+        try {
+            const users = await User.find({});
+            console.log(users); // No need to parse; `users` is already a JavaScript object
+            response.json(users);
+        } catch (error) {
+            console.error(error);
+            response.status(500).json({ message: 'Error fetching users' });
+        }
+    })
+    .post(async (request, response) => {
+        try {
+            const { name, email, password } = request.body;
+            const new_user = new User({ name, email, password });
+            new_user.save();
+            response.json(new_user);
+        } catch (error) {
+            console.error(error);
+            response.status(500).json({ message: 'Error fetching users' });
+        }
     })
     .put((request, response) => {
         // Handle updating all users
