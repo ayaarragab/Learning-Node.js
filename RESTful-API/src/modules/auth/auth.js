@@ -44,13 +44,13 @@ export const protect = (req, res, next) => {
     }
 }
 // for signin
-const comparePasswords = (passwordPlain, hashedPassword) => {
+export const comparePasswords = (passwordPlain, hashedPassword) => {
     return bcrypt.compare(passwordPlain, hashedPassword);
 }
 
 // for initial hashing
 
-const hashPassword = (password) => {
+export const hashPassword = (password) => {
     return bcrypt.hash(password, 5);
     /**
      * 5 is a salt, for more security, for making it harder for 
