@@ -4,6 +4,8 @@ import router from "./routers.js";
 import morgan from "morgan"; // useful middleware
 import cors from "cors";
 import {protect} from "./modules/auth/auth.js";
+import * as handlers from "../src/modules/handlers/user.js";
+
 
 const app = express();
 
@@ -41,8 +43,15 @@ app.get('/', (req, res) => {
 
 // app.use() allows you to apply global configurations either on a specific path or on the entire app
 
-app.use('/api', protect ,router); // not a middleware, concatenated '/api' to be first in all paths strings
+app.use('/api', protect, router); // not a middleware, concatenated '/api' to be first in all paths strings
 
+/**
+ * The following routes have not to be protected
+ * as the person who signin or register will not have JWT
+ *  */
+
+app.post('/user', handlers.createUser);
+app.post('/signin', handlers.signin);
 /**
  * app.get("/todo/:id", mymiddleware1, mymiddleware2, handler);
  * or app.get("/todo/:id", [mymiddleware1, mymiddleware2], handler);

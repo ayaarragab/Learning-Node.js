@@ -26,14 +26,15 @@ export const protect = (req, res, next) => {
     }
     
     const token = bearer.split(" ")[1];
-
+    console.log(token);
+    
     if (!token) {
         res.status(401).json({ message: "Not valid token" });
         return;
     }
 
     try {
-      const user = jwt.verify(token, process.nextTick.JWT_SECRET);
+      const user = jwt.verify(token, process.env.JWT_SECRET);
       req.user = user;
       next(); // now anything in the stack will know req.user 
     } catch (error) {
@@ -50,8 +51,8 @@ export const comparePasswords = (passwordPlain, hashedPassword) => {
 
 // for initial hashing
 
-export const hashPassword = (password) => {
-    return bcrypt.hash(password, 5);
+export const hashPassword = async (password) => {
+    return await bcrypt.hash(password, 5);
     /**
      * 5 is a salt, for more security, for making it harder for 
      * brute-force attacks to guess the password

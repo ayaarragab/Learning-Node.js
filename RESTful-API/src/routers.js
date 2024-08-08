@@ -1,6 +1,5 @@
 import Router from "express";
 import User from "../models/user.js";
-import { json } from "node:stream/consumers";
 
 const router = Router();
 
@@ -55,6 +54,8 @@ router.route('/users/:id')
         // Handle deleting a specific user by ID
         response.json({ message: `Delete user with ID: ${request.params.id}` });
     });
+
+
 
 /**
  * Applications routes

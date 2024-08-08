@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import User from "../../../models/user";
+import User from "../../../models/user.js";
 import {hashPassword, createJWT, comparePasswords} from "../auth/auth.js";
 
 /**
@@ -9,7 +8,12 @@ import {hashPassword, createJWT, comparePasswords} from "../auth/auth.js";
  * @param {*} res 
  */
 export const createUser = async (req, res) => {
-    const user = await User.create({
+  const isExist = await User.findOne({email: req.body.email});
+  if (isExist) {
+    res.json({message: "This Email used before"});
+    return;
+  }  
+  const user = await User.create({
         name: req.body.name,
         email: req.body.email,
         password: await hashPassword(req.body.password)
@@ -20,11 +24,29 @@ export const createUser = async (req, res) => {
 
 
 export const signin = async (req, res) => {
-  const user = (await User.find({})).filter(user => user.email === req.body.email);
-  const isValid = comparePasswords(req.body.password, hashPassword(user.password));
-  if (!isValid) {
-    res.status(401);
-    res.json({message: 'stop doing that!'});
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email: req.body.email });
+    
+    if (!user) {
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    // Compare the plain text password with the hashed password stored in the database
+    const isValid = await comparePasswords(req.body.password, user.password);
+    
+    if (!isValid) {
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    // If the password is valid, you can proceed to create a JWT or respond with user data
+    const token = createJWT(user); // Assuming you have a createJWT function
+    res.json({ token });
+  } catch (error) {
+    console.error("Error during sign-in:", error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
