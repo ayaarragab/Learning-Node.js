@@ -1,8 +1,11 @@
 import Router from "express";
 import User from "../models/user.js";
+import {body, validationResult} from "express-validator";
 
 const router = Router();
-
+/**
+ * Every route in this routes is protected because of the protect middleware (check serverUsingExpress.js and handlers.js)
+ */
 /**
  * Users routes
  */
@@ -37,8 +40,8 @@ router.route('/users')
         response.json({ message: "Users deleted" });
     });
 
-router.route('/users/:id')
-    .get((request, response) => {
+router.route('/userProfile', body('name').isString) // means req.body should have name field
+    .put((request, response) => {
         // Handle getting a specific user by ID
         response.json({ message: `Get user with ID: ${request.params.id}` });
     })
@@ -46,9 +49,19 @@ router.route('/users/:id')
         // Not typically used for a single user, but if needed:
         response.json({ message: `Post to user with ID: ${request.params.id}` });
     })
-    .put((request, response) => {
-        // Handle updating a specific user by ID
-        response.json({ message: `Update user with ID: ${request.params.id}` });
+    .get(async (request, response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty) {
+            response.status(400);
+            response.json({errors: errors.array()});
+        }
+        else {
+            const isExist = await User.findOne({name: request.body.name});
+            if (isExist) {
+                response.json({message: `Welcome to ${request.body.name} profile
+                    ${request.body.name}'s email is ${isExist.email}`});
+            }  
+        }
     })
     .delete((request, response) => {
         // Handle deleting a specific user by ID
