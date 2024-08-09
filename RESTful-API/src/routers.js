@@ -1,11 +1,8 @@
 import Router from "express";
 import User from "../models/user.js";
-import {body} from "express-validator";
 import { handleErrors, validateApplication } from "./modules/middlewares.js";
 import Application from "../models/application.js";
 import Job from "../models/job.js";
-import mongoose from "mongoose";
-
 
 const router = Router();
 /**
@@ -13,65 +10,43 @@ const router = Router();
  *  1- Identify where the input validtions need to exist
  *  2- Identify resources that you'll need to crud
  *  3- create input validators by expressvalidators library
- */
+ * 
+ * Every route in this routes is protected because of the protect 
+   middleware (check serverUsingExpress.js and handlers.js)
+*/
 
-
-/**
- * Every route in this routes is protected because of the protect middleware (check serverUsingExpress.js and handlers.js)
- */
 /**
  * Users routes
  */
-router.route('/users')
-    .get(async (request, response) => {
+router.route('/users') // when you fetch data of all users
+    .get(async (request, response) => { // **** Done ****
         try {
             const users = await User.find({});
-            console.log(users); // No need to parse; `users` is already a JavaScript object
             response.json(users);
         } catch (error) {
             console.error(error);
             response.status(500).json({ message: 'Error fetching users' });
         }
     })
-    .put((request, response) => {
-        // Handle updating all users
-        response.json({ message: "Users updated" });
-    })
-    .delete((request, response) => {
-        // Handle deleting all users
-        response.json({ message: "Users deleted" });
-    });
 
-/**
- * More oragnized way is to put input validators in  a specific module
- */
-router.route('/userProfile', body('name').isString, handleErrors) // means req.body should have name field
-    .put((request, response) => {
-    })
-    .post((request, response) => {
-        // Not typically used for a single user, but if needed:
-        response.json({ message: `Post to user with ID: ${request.params.id}` });
-    })
+
+// ✔✔ DONE ✔✔ //
+router.route('/user', handleErrors) // when you fetch data of another user
     .get(async (request, response) => { // ***** DONE *****
         const isExist = await User.findOne({name: request.body.name});
         if (isExist) {
-            response.json({message: `Welcome to ${request.body.name} profile
-                ${request.body.name}'s email is ${isExist.email}`});
+            response.json(isExist);
     }
     })
-    .delete((request, response) => {
-        // Handle deleting a specific user by ID
-        response.json({ message: `Delete user with ID: ${request.params.id}` });
-    });
-
+// ✔✔ DONE ✔✔ //
 
 
 /**
  * Applications routes
  */
 
-// ✔✔ DONE ✔✔
-router.route('/applications')
+// ✔✔ DONE ✔✔ //
+router.route('/applications', handleErrors)
     .get(async (request, response) => { // **** Done ****
         try {
             const user = request.user;
@@ -93,7 +68,7 @@ router.route('/applications')
             const user = request.user;
                         
             try {
-                const userApplications = await Application.deleteMany({ applicant: user.id });
+                await Application.deleteMany({ applicant: user.id });
                 response.status(200).json({message: "Your applications have been canceled"});
             } catch (error) {
                 console.log(error);
@@ -103,10 +78,10 @@ router.route('/applications')
             response.status(401).json({message: "please signin or register first"});
         }
     });
-// ✔✔ DONE ✔✔
+// ✔✔ DONE ✔✔ //
 
 
-// ✔✔ DONE ✔✔
+// ✔✔ DONE ✔✔ //
 router.route('/application/:jobId', handleErrors, validateApplication)
     .get(async (request, response) => { // **** DONE ****
         const {jobId} = request.params;
@@ -177,31 +152,24 @@ router.route('/application/:jobId', handleErrors, validateApplication)
             response.json({message: "This job doesn't exist"});
         } 
     });
-// ✔✔ DONE ✔✔
+// ✔✔ DONE ✔✔ //
 
 
-router.route('/:userId/applications')
-    .get((request, response) => {
-    })
 
-    .post((request, response) => {
-    })
-
-    .put((request, response) => {
-    })
-
-    .delete((request, response) => {
-    });
 
 /**
  * Jobs routes
  */
 
 
-router.route('/jobs')
-    .get((request, response) => {
-        // Handle getting all jobs
-        response.json({ message: "Get all jobs" });
+router.route('/jobs', handleErrors)
+    .get(async (request, response) => {
+        try {
+            const jobs = await Job.find({});
+            response.status(200).json({data: jobs, success: true ,message: "Here's all the available jobs"});
+        } catch (error) {
+            response.status(501).json({data: [], success: false ,message: "Server error"});
+        }
     })
 
     .post((request, response) => {
@@ -218,7 +186,7 @@ router.route('/jobs')
     });
 
 
-router.route('/jobs/:id')
+router.route('/jobs/:id', handleErrors)
     .get((request, response) => {
     })
 
@@ -232,7 +200,10 @@ router.route('/jobs/:id')
     });
 
 
-router.route('/jobs/:id/employees')
+/**
+ * When Implementing company model
+ */
+router.route('company/:companyId/employees', handleErrors)
     .get((request, response) => {
     })
 
