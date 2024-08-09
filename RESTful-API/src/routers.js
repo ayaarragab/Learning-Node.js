@@ -1,7 +1,10 @@
 import Router from "express";
 import User from "../models/user.js";
 import {body} from "express-validator";
-import { handleErrors } from "./modules/middlewares.js";
+import { handleErrors, validateApplication } from "./modules/middlewares.js";
+import Application from "../models/application.js";
+import Job from "../models/job.js";
+import mongoose from "mongoose";
 
 
 const router = Router();
@@ -30,17 +33,6 @@ router.route('/users')
             response.status(500).json({ message: 'Error fetching users' });
         }
     })
-    .post(async (request, response) => {
-        try {
-            const { name, email, password } = request.body;
-            const new_user = new User({ name, email, password });
-            new_user.save();
-            response.json(new_user);
-        } catch (error) {
-            console.error(error);
-            response.status(500).json({ message: 'Error fetching users' });
-        }
-    })
     .put((request, response) => {
         // Handle updating all users
         response.json({ message: "Users updated" });
@@ -55,14 +47,12 @@ router.route('/users')
  */
 router.route('/userProfile', body('name').isString, handleErrors) // means req.body should have name field
     .put((request, response) => {
-        // Handle getting a specific user by ID
-        response.json({ message: `Get user with ID: ${request.params.id}` });
     })
     .post((request, response) => {
         // Not typically used for a single user, but if needed:
         response.json({ message: `Post to user with ID: ${request.params.id}` });
     })
-    .get(async (request, response) => {
+    .get(async (request, response) => { // ***** DONE *****
         const isExist = await User.findOne({name: request.body.name});
         if (isExist) {
             response.json({message: `Welcome to ${request.body.name} profile
@@ -79,115 +69,180 @@ router.route('/userProfile', body('name').isString, handleErrors) // means req.b
 /**
  * Applications routes
  */
-router.route('/applications')
-    .get((request, response) => {
-        // Handle getting all applications
-        response.json({ message: "Get all applications" });
-    })
-    .post((request, response) => {
-        // Handle creating an application
-        response.json({ message: "Application created" });
-    })
-    .put((request, response) => {
-        // Handle updating all applications
-        response.json({ message: "Applications updated" });
-    })
-    .delete((request, response) => {
-        // Handle deleting all applications
-        response.json({ message: "Applications deleted" });
-    });
 
-router.route('/applications/:id')
-    .get((request, response) => {
-        // Handle getting a specific application by ID
-        response.json({ message: `Get application with ID: ${request.params.id}` });
+// ✔✔ DONE ✔✔
+router.route('/applications')
+    .get(async (request, response) => { // **** Done ****
+        try {
+            const user = request.user;
+                        
+            try {
+                const userApplications = await Application.find({ applicant: user.id });
+                response.status(200).json(userApplications);
+            } catch (error) {
+                console.log(error);
+                
+                response.status(500).json({message: "Server issue"});
+            }
+        } catch (error) {
+            response.status(401).json({message: "please signin or register first"});
+        }
     })
-    .post((request, response) => {
-        // Not typically used for a single application, but if needed:
-        response.json({ message: `Post to application with ID: ${request.params.id}` });
-    })
-    .put((request, response) => {
-        // Handle updating a specific application by ID
-        response.json({ message: `Update application with ID: ${request.params.id}` });
-    })
-    .delete((request, response) => {
-        // Handle deleting a specific application by ID
-        response.json({ message: `Delete application with ID: ${request.params.id}` });
+    .delete(async (request, response) => {
+        try {
+            const user = request.user;
+                        
+            try {
+                const userApplications = await Application.deleteMany({ applicant: user.id });
+                response.status(200).json({message: "Your applications have been canceled"});
+            } catch (error) {
+                console.log(error);
+                response.status(500).json({message: "Server issue"});
+            }
+        } catch (error) {
+            response.status(401).json({message: "please signin or register first"});
+        }
     });
+// ✔✔ DONE ✔✔
+
+
+// ✔✔ DONE ✔✔
+router.route('/application/:jobId', handleErrors, validateApplication)
+    .get(async (request, response) => { // **** DONE ****
+        const {jobId} = request.params;
+        try {
+            const job = await Job.findById(jobId);
+            try {
+                const application = await Application.findOne({job: jobId, applicant: request.user._id});
+                
+                if (application) {
+                    response.status(200).json({message: `Here's your application in ${job.title}`, application});
+                }
+                else {
+                    response.status(400).json({message: `You didn't apply for the ${job.title} position or you may have deleted it`}); 
+                }
+            } catch (error) {
+                response.status(400).json({message: `You didn't apply for the ${job.title} position`});   
+            }
+        } catch (error) {
+            response.json({message: "This job doesn't exist"});
+        } 
+    })
+
+    .post(async (req, res) => { // **** DONE ****
+        const { resume, coverLetter } = req.body;
+        const { jobId } = req.params;
+
+        try {
+            const job = await Job.findById(jobId);
+            if (!job)
+                return res.status(404).json({ error: 'Job not found' });
+
+            const user = req.user;
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            console.log(user.id);
+            
+            const application = await Application.create({
+                applicant: user.id,
+                resume,
+                coverLetter,
+                job: job._id,
+                status: 'pending',
+            });
+            application.save();
+            const dataToBeSent = {application, jobTitle: job.title}
+            res.status(200).json({dataToBeSent, message: `You successfully applied to ${job.title} position`});
+        } catch (error) {
+            console.log(error);
+            
+            res.status(500).json({ error: 'Failed to create application' });
+        }
+    })
+
+    .delete(async (request, response) => { // **** DONE ****
+        const {jobId} = request.params;
+        try {
+            const job = await Job.findById(jobId);
+            try {
+                const application = await Application.findOne({job: jobId, applicant: request.user._id});
+                console.log(job);
+                await application.deleteOne();
+                response.status(200).json({message: `Your application in ${job.title} has been deleted`});
+            } catch (error) {
+                response.status(400).json({message: `You didn't apply for the ${job.title} position`});   
+            }
+        } catch (error) {
+            response.json({message: "This job doesn't exist"});
+        } 
+    });
+// ✔✔ DONE ✔✔
+
 
 router.route('/:userId/applications')
     .get((request, response) => {
-        // Handle getting applications for a specific user
-        response.json({ message: `Get applications for user with ID: ${request.params.userId}` });
     })
+
     .post((request, response) => {
-        // Handle creating an application for a specific user
-        response.json({ message: `Create application for user with ID: ${request.params.userId}` });
     })
+
     .put((request, response) => {
-        // Handle updating applications for a specific user
-        response.json({ message: `Update applications for user with ID: ${request.params.userId}` });
     })
+
     .delete((request, response) => {
-        // Handle deleting applications for a specific user
-        response.json({ message: `Delete applications for user with ID: ${request.params.userId}` });
     });
 
 /**
  * Jobs routes
  */
+
+
 router.route('/jobs')
     .get((request, response) => {
         // Handle getting all jobs
         response.json({ message: "Get all jobs" });
     })
+
     .post((request, response) => {
         // Handle creating a job
         response.json({ message: "Job created" });
     })
+
     .put((request, response) => {
         // Handle updating all jobs
         response.json({ message: "Jobs updated" });
     })
+
     .delete((request, response) => {
-        // Handle deleting all jobs
-        response.json({ message: "Jobs deleted" });
     });
+
 
 router.route('/jobs/:id')
     .get((request, response) => {
-        // Handle getting a specific job by ID
-        response.json({ message: `Get job with ID: ${request.params.id}` });
     })
+
     .post((request, response) => {
-        // Not typically used for a single job, but if needed:
-        response.json({ message: `Post to job with ID: ${request.params.id}` });
     })
+
     .put((request, response) => {
-        // Handle updating a specific job by ID
-        response.json({ message: `Update job with ID: ${request.params.id}` });
     })
+
     .delete((request, response) => {
-        // Handle deleting a specific job by ID
-        response.json({ message: `Delete job with ID: ${request.params.id}` });
     });
+
 
 router.route('/jobs/:id/employees')
     .get((request, response) => {
-        // Handle getting employees for a specific job
-        response.json({ message: `Get employees for job with ID: ${request.params.id}` });
     })
+
     .post((request, response) => {
-        // Handle adding an employee to a specific job
-        response.json({ message: `Add employee to job with ID: ${request.params.id}` });
     })
+
     .put((request, response) => {
-        // Handle updating employees for a specific job
-        response.json({ message: `Update employees for job with ID: ${request.params.id}` });
     })
+
     .delete((request, response) => {
-        // Handle deleting employees for a specific job
-        response.json({ message: `Delete employees for job with ID: ${request.params.id}` });
     });
 
 export default router;

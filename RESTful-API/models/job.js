@@ -26,8 +26,7 @@ const jobSchema = new mongoose.Schema({
     default: Date.now,
   },
   company: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Company',
+    type: String,
     required: true,
   },
 });

@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
 
 export const ApplicationSchema = new mongoose.Schema({
-    applicantName: {
-        type: String,
-        required: true,
-      },
-      applicantEmail: {
-        type: String,
-        required: true,
+      applicant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
       },
       resume: {
         type: String, // URL to the resume file
@@ -23,7 +20,7 @@ export const ApplicationSchema = new mongoose.Schema({
       },
       job: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Job',
+        ref: 'Job',  // Referencing the Job model
         required: true,
       },
       status: {
