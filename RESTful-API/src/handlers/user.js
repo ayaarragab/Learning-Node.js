@@ -1,5 +1,5 @@
-import User from "../../../models/user.js";
-import {hashPassword, createJWT, comparePasswords} from "../auth/auth.js";
+import User from "../../models/user.js";
+import {hashPassword, createJWT, comparePasswords} from "../modules/auth.js";
 
 /**
  * talking to a database is asyncronus like talking to the network,

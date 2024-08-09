@@ -1,8 +1,18 @@
 import Router from "express";
 import User from "../models/user.js";
-import {body, validationResult} from "express-validator";
+import {body} from "express-validator";
+import { handleErrors } from "./modules/middlewares.js";
+
 
 const router = Router();
+/**
+ * Steps for input validations:
+ *  1- Identify where the input validtions need to exist
+ *  2- Identify resources that you'll need to crud
+ *  3- create input validators by expressvalidators library
+ */
+
+
 /**
  * Every route in this routes is protected because of the protect middleware (check serverUsingExpress.js and handlers.js)
  */
@@ -40,7 +50,10 @@ router.route('/users')
         response.json({ message: "Users deleted" });
     });
 
-router.route('/userProfile', body('name').isString) // means req.body should have name field
+/**
+ * More oragnized way is to put input validators in  a specific module
+ */
+router.route('/userProfile', body('name').isString, handleErrors) // means req.body should have name field
     .put((request, response) => {
         // Handle getting a specific user by ID
         response.json({ message: `Get user with ID: ${request.params.id}` });
@@ -50,18 +63,11 @@ router.route('/userProfile', body('name').isString) // means req.body should hav
         response.json({ message: `Post to user with ID: ${request.params.id}` });
     })
     .get(async (request, response) => {
-        const errors = validationResult(request);
-        if (!errors.isEmpty) {
-            response.status(400);
-            response.json({errors: errors.array()});
-        }
-        else {
-            const isExist = await User.findOne({name: request.body.name});
-            if (isExist) {
-                response.json({message: `Welcome to ${request.body.name} profile
-                    ${request.body.name}'s email is ${isExist.email}`});
-            }  
-        }
+        const isExist = await User.findOne({name: request.body.name});
+        if (isExist) {
+            response.json({message: `Welcome to ${request.body.name} profile
+                ${request.body.name}'s email is ${isExist.email}`});
+    }
     })
     .delete((request, response) => {
         // Handle deleting a specific user by ID

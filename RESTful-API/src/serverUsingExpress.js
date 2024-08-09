@@ -3,8 +3,8 @@ import path from 'path';
 import router from "./routers.js";
 import morgan from "morgan"; // useful middleware
 import cors from "cors";
-import {protect} from "./modules/auth/auth.js";
-import * as handlers from "../src/modules/handlers/user.js";
+import {protect} from "./modules/auth.js";
+import * as handlers from "../src/handlers/user.js";
 
 
 const app = express();
