@@ -7,7 +7,7 @@ import { handleErrors, validateApplication, onlyForCEO } from "./modules/middlew
 import { body } from "express-validator";
 import {getAllJobs, jobValidations, createJob} from "./handlers/job.js";
 import { retrieveUser, retrieveAllUsers } from "./handlers/user.js";
-import { getApplications, deleteApplications, getApplication, createApplication } from "./handlers/application.js";
+import { getApplications, deleteApplications, getApplication, createApplication, deleteApplication } from "./handlers/application.js";
 
 
 const router = Router();
