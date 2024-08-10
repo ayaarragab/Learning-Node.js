@@ -36,6 +36,8 @@ export const deleteApplications = async(request, response) => {
     }
 }
 
+
+// has issue
 export const getApplication = async (request, response) => { // **** DONE ****
     const {jobId} = request.params;
     try {
