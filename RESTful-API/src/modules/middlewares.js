@@ -1,4 +1,5 @@
 import { validationResult, body } from "express-validator";
+import { isSet } from "util/types";
 
 export const handleErrors = (request, response, next) => {
     const errors = validationResult(request);
@@ -20,8 +21,9 @@ export const validateApplication = [
 
 
 export const onlyForCEO = (req, res, next) => {
+    console.log("Are you here");
     
-    if (!req.user.isCEO) {
+    if (!isSet(req.user.isCEO) || !req.user.isCEO) {
         res.status(401).json({data:[], success: false, message:"Not authorized"});
         return;
     }

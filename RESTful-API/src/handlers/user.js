@@ -27,6 +27,7 @@ export const signin = async (req, res) => {
   try {
     // Find the user by email
     const user = await User.findOne({ email: req.body.email });
+    console.log(user.isCEO);
     
     if (!user) {
       res.status(401).json({ message: 'Invalid credentials' });

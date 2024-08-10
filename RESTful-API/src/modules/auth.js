@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-
+import User from "../../models/user.js";
 
 export const createJWT = (user) => {
     const token = jwt.sign(
@@ -11,7 +11,7 @@ export const createJWT = (user) => {
 }
 // place of this token is preferred to be in the authorization header
 
-export const protect = (req, res, next) => {
+export const protect = async(req, res, next) => {
     // bearer is a generic word that describes anyone that has an authorization from any type (design pattern)
     // means you literally put the word bearer in front of your token
     const bearer = req.headers.authorization;
@@ -33,7 +33,10 @@ export const protect = (req, res, next) => {
     }
 
     try {
-      const user = jwt.verify(token, process.env.JWT_SECRET);
+      const userJWT = jwt.verify(token, process.env.JWT_SECRET);
+      
+      const user = await User.findById(userJWT.id);
+      
       req.user = user;
       next(); // now anything in the stack will know req.user 
     } catch (error) {

@@ -120,7 +120,6 @@ router.route('/application/:jobId', handleErrors, validateApplication)
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
-            console.log(user.id);
             
             const application = await Application.create({
                 applicant: user.id,
@@ -145,7 +144,6 @@ router.route('/application/:jobId', handleErrors, validateApplication)
             const job = await Job.findById(jobId);
             try {
                 const application = await Application.findOne({job: jobId, applicant: request.user._id});
-                console.log(job);
                 await application.deleteOne();
                 response.status(200).json({message: `Your application in ${job.title} has been deleted`});
             } catch (error) {
@@ -175,9 +173,10 @@ router.route('/jobs', handleErrors)
         }
     })
 
-    router.route('/jobs', handleErrors, onlyForCEO)
+
+// Has a issue that onlyForCEO doesn't work properly
+router.route('/jobs', onlyForCEO, handleErrors)
     .post(async(request, response) => {
-        
         const {title, description, requirements, location, salary, company} = request.body;
         
         try {
