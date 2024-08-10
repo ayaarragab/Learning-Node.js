@@ -17,3 +17,13 @@ export const validateApplication = [
     body('coverLetter').isString().withMessage('Cover letter must be a string'),
     body('jobTitle').isString().withMessage('Job title must be a string'),
 ]
+
+
+export const onlyForCEO = (req, res, next) => {
+    
+    if (!req.user.isCEO) {
+        res.status(401).json({data:[], success: false, message:"Not authorized"});
+        return;
+    }
+    next();
+}

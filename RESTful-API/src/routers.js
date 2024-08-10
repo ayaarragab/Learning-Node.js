@@ -1,8 +1,11 @@
 import Router from "express";
 import User from "../models/user.js";
-import { handleErrors, validateApplication } from "./modules/middlewares.js";
+import { handleErrors, validateApplication, onlyForCEO } from "./modules/middlewares.js";
 import Application from "../models/application.js";
 import Job from "../models/job.js";
+import { Company } from "../models/company.js";
+import { error } from "console";
+
 
 const router = Router();
 /**
@@ -172,9 +175,33 @@ router.route('/jobs', handleErrors)
         }
     })
 
-    .post((request, response) => {
-        // Handle creating a job
-        response.json({ message: "Job created" });
+    router.route('/jobs', handleErrors, onlyForCEO)
+    .post(async(request, response) => {
+        
+        const {title, description, requirements, location, salary, company} = request.body;
+        
+        try {
+            const companyE = await Company.findOne({name: company});
+            if (companyE) {
+                const job = await Job.create(
+                    {
+                        title,
+                        description,
+                        requirements,
+                        location,
+                        salary,
+                        company
+                    });
+                job.save();
+                response.status(200).json({data:[], success: true, message:"Your Job has been created"});
+            } else {
+                response.status(404).json({data:[], success: false, message: "Please enter a company"}); 
+            }
+        } catch (error) {
+            console.log(error);
+            
+            response.status(404).json({data:[], success: false, message: "This company doesn't exist"});
+        }
     })
 
     .put((request, response) => {
