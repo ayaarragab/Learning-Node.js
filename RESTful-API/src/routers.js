@@ -4,8 +4,7 @@ import { handleErrors, validateApplication, onlyForCEO } from "./modules/middlew
 import Application from "../models/application.js";
 import Job from "../models/job.js";
 import { Company } from "../models/company.js";
-import { error } from "console";
-
+import { body } from "express-validator";
 
 const router = Router();
 /**
@@ -21,7 +20,7 @@ const router = Router();
 /**
  * Users routes
  */
-router.route('/users') // when you fetch data of all users
+router.route('/users',handleErrors) // when you fetch data of all users
     .get(async (request, response) => { // **** Done ****
         try {
             const users = await User.find({});
@@ -34,7 +33,7 @@ router.route('/users') // when you fetch data of all users
 
 
 // ✔✔ DONE ✔✔ //
-router.route('/user', handleErrors) // when you fetch data of another user
+router.route('/user', body('name').exists().isString() ,handleErrors) // when you fetch data of another user
     .get(async (request, response) => { // ***** DONE *****
         const isExist = await User.findOne({name: request.body.name});
         if (isExist) {
@@ -162,8 +161,9 @@ router.route('/application/:jobId', handleErrors, validateApplication)
  * Jobs routes
  */
 
+// ✔✔ DONE ✔✔ //
 
-router.route('/jobs', handleErrors)
+router.route('/alljobs', handleErrors)
     .get(async (request, response) => {
         try {
             const jobs = await Job.find({});
@@ -172,47 +172,49 @@ router.route('/jobs', handleErrors)
             response.status(501).json({data: [], success: false ,message: "Server error"});
         }
     })
+// ✔✔ DONE ✔✔ //
 
 
-// Has a issue that onlyForCEO doesn't work properly
-router.route('/jobs', onlyForCEO, handleErrors)
-    .post(async(request, response) => {
-        const {title, description, requirements, location, salary, company} = request.body;
-        
-        try {
-            const companyE = await Company.findOne({name: company});
-            if (companyE) {
-                const job = await Job.create(
-                    {
-                        title,
-                        description,
-                        requirements,
-                        location,
-                        salary,
-                        company
-                    });
-                job.save();
-                response.status(200).json({data:[], success: true, message:"Your Job has been created"});
-            } else {
-                response.status(404).json({data:[], success: false, message: "Please enter a company"}); 
-            }
-        } catch (error) {
-            console.log(error);
-            
-            response.status(404).json({data:[], success: false, message: "This company doesn't exist"});
+// ✔✔ DONE ✔✔ //
+router.post('/jobs', onlyForCEO, handleErrors , 
+    body('title').isString().exists(),
+    body('description').isString().exists(),
+    body('requirements').isString().exists(),
+    body('location').isString().exists(),
+    body('salary').isNumeric().exists(),
+    body('company').isString().exists(),
+    async(request, response) => {
+    const { title, description, requirements, location, salary, company } = request.body;
+
+    try {
+        const companyExists = await Company.findOne({ name: company });
+    
+        if (!companyExists) {
+            return response.status(404).json({ success: false, message: "Please enter a valid company" });
         }
+    
+        const job = await Job.create({
+            title,
+            description,
+            requirements,
+            location,
+            salary,
+            company
+        });
+        job.save();
+        response.status(200).json({ success: true, message: "Job created successfully" });
+        
+    } catch (error) {
+        console.error(error);
+        response.status(500).json({ success: false, message: "An error occurred while creating the job" });
+    }
     })
+// ✔✔ DONE ✔✔ //
 
-    .put((request, response) => {
-        // Handle updating all jobs
-        response.json({ message: "Jobs updated" });
-    })
-
-    .delete((request, response) => {
-    });
-
-
-router.route('/jobs/:id', handleErrors)
+/**
+ * When Implementing company model
+ */
+router.route('/company', handleErrors)
     .get((request, response) => {
     })
 
@@ -225,10 +227,19 @@ router.route('/jobs/:id', handleErrors)
     .delete((request, response) => {
     });
 
+router.route('/company/jobs', handleErrors)
+    .get((request, response) => {
+    })
 
-/**
- * When Implementing company model
- */
+    .post((request, response) => {
+    })
+
+    .put((request, response) => {
+    })
+
+    .delete((request, response) => {
+    });
+
 router.route('company/:companyId/employees', handleErrors)
     .get((request, response) => {
     })

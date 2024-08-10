@@ -16,7 +16,8 @@ export const createUser = async (req, res) => {
   const user = await User.create({
         name: req.body.name,
         email: req.body.email,
-        password: await hashPassword(req.body.password)
+        password: await hashPassword(req.body.password),
+        isCEO: req.body.isCEO
     });
     const token = createJWT(user);
     res.json({token}); // {token} === {token: token}

@@ -50,7 +50,7 @@ app.use('/api', protect, router); // not a middleware, concatenated '/api' to be
  * as the person who signin or register will not have JWT
  *  */
 
-app.post('/user', handlers.createUser);
+app.post('/register', handlers.createUser);
 app.post('/signin', handlers.signin);
 /**
  * app.get("/todo/:id", mymiddleware1, mymiddleware2, handler);
