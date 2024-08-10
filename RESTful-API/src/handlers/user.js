@@ -52,4 +52,20 @@ export const signin = async (req, res) => {
   }
 }
 
+export const retrieveAllUsers = async (request, response) => {
+  try {
+    const users = await User.find({});
+    response.json(users);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: 'Error fetching users' });
+  }
+}
+
+export const retrieveUser = async(req, res) => {
+  const isExist = await User.findOne({name: request.body.name});
+  if (isExist) {
+      response.json(isExist);
+  }
+}
 // in bycrbt, you have 2 options, to do compareSync, that not retrn proimes
