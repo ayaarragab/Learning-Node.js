@@ -26,10 +26,10 @@ app.use(express.urlencoded({extended: true})); // basically it allows client to 
  * And this is how every middleware is made in the background
  */
 
-app.use((req, res, next) => {
-    req.secret = "secret don't tell anyone";
-    next();
-})
+// app.use((req, res, next) => {
+//     req.secret = "secret don't tell anyone";
+//     next();
+// })
 
 /**
  * do you know what is this next() ? it's the next middleware literally !

@@ -1,7 +1,5 @@
 import Job from "../../models/job.js";
 import { Company } from "../../models/company.js";
-// import User from "../../models/user.js";
-// import Application from "../../models/application.js";
 import { body } from "express-validator";
 
 /**

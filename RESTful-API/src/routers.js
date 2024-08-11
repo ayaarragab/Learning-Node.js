@@ -8,6 +8,7 @@ import { body } from "express-validator";
 import {getAllJobs, jobValidations, createJob} from "./handlers/job.js";
 import { retrieveUser, retrieveAllUsers } from "./handlers/user.js";
 import { getApplications, deleteApplications, getApplication, createApplication, deleteApplication } from "./handlers/application.js";
+import { getCompanyInfo, companyValidations, getAllCompanies } from "./handlers/company.js";
 
 
 const router = Router();
@@ -33,26 +34,27 @@ router.delete('/application/:jobId', handleErrors, validateApplication, deleteAp
  * Jobs endpoints
  */
 router.get('/alljobs', handleErrors, getAllJobs);
+// will be ommitted, company/job instead
 router.post('/jobs', onlyForCEO, handleErrors , jobValidations, createJob);
 
 
 /**
  * Company endpoints
  */
-router.route('/company', handleErrors)
-router.get('/company', handleErrors)
-router.post('/company', handleErrors)
-router.put('/company', handleErrors)
-router.delete('/company', handleErrors)
+router.get('/companies', handleErrors, getAllCompanies) // ✔
+router.get('/company', companyValidations, handleErrors, getCompanyInfo); // ✔
+router.post('/company', handleErrors, /*createCompany*/);
+router.put('/company', handleErrors, /*updateCompanyInfo*/);
+router.delete('/company', handleErrors, /*deleteCompany*/);
 
-router.get('/company/jobs', handleErrors)
-router.post('/company/jobs', handleErrors)
-router.put('/company/jobs', handleErrors)
-router.delete('/company/jobs', handleErrors)
+router.get('/company/jobs', handleErrors, /*getCompanyJobs*/);
+router.post('/company/jobs', handleErrors, createJob);
+router.put('/company/jobs', handleErrors, /*updateJob*/);
+router.delete('/company/jobs', handleErrors, /*deleteJob*/);
 
-router.get('company/:companyId/employees', handleErrors)
-router.post('company/:companyId/employees', handleErrors)
-router.put(('company/:companyId/employees', handleErrors));
-router.delete('company/:companyId/employees', handleErrors);
+router.get('company/employees', handleErrors, /*getCompanyEmployees*/);
+router.post('company/employees', handleErrors, /*addEmployee*/);
+router.put('company/employees', handleErrors, /*UpdateEmployeeInfo*/);
+router.delete('company/employees', handleErrors, /*deleteEmployee*/);
 
 export default router;
