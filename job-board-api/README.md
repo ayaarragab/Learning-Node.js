@@ -216,7 +216,7 @@ To obtain a token, use the /register endpoint with valid credentials.
     "success": true,
     "message": "Company deleted successfully."
   }
-```
+    ```
 
 ---
 
@@ -243,7 +243,7 @@ To obtain a token, use the /register endpoint with valid credentials.
   "success": true,
   "message": "Here're all the jobs of [company name] company."
   }
-  ```
+    ```
 
 #### 2\. Create Job
 
@@ -384,7 +384,7 @@ To obtain a token, use the /register endpoint with valid credentials.
     "success": true,
     "message": "Here are the employees of [company name]."
     }
-```
+    ```
 
 #### 2\. Delete Employee
 
@@ -408,7 +408,7 @@ To obtain a token, use the /register endpoint with valid credentials.
     "success": true,
     "message": "Employee deleted successfully."
   }
-```
+    ```
 ---
 
 ## Notes
