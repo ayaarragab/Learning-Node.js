@@ -1,61 +1,50 @@
-/**
- * Every route in this routes is protected because of the protect 
-   middleware (check serverUsingExpress.js and handlers.js)
-*/
-import Router from "express";
-import { handleErrors, validateApplication, isEligible, isCEO } from "./modules/middlewares.js";
-import { body } from "express-validator";
-import {getAllJobs, jobValidationsGET, jobValidationsPOST, createJob, updateJob, deleteJob, getCompanyJobs, getJob} from "./handlers/job.js";
-import { retrieveUser, retrieveAllUsers } from "./handlers/user.js";
-import { getApplications, deleteApplications, getApplication, createApplication, deleteApplication } from "./handlers/application.js";
-import { getCompanyInfo, companyValidationsGET, getAllCompanies, createCompany, companyJobValidations, companyValidationsPOST, updateCompanyInfo, deleteCompany } from "./handlers/company.js";
+import * as helpers from "./neededImports.js";
 
-
-const router = Router();
+const router = helpers.Router();
 
 /**
  * Users endpoints
  */
-router.get('/users', handleErrors, retrieveAllUsers);
-router.get('/user', body('name').exists().isString(), handleErrors, retrieveUser)
+router.get('/users', helpers.handleErrors, helpers.retrieveAllUsers);
+router.get('/user', helpers.body('name').exists().isString(), helpers.handleErrors, helpers.retrieveUser)
 
 
 /**
  * Applications endpoints
  */
-router.get('/applications', handleErrors, getApplications);
-router.delete('/applications', handleErrors, deleteApplications);
-router.get('/application/:jobId', handleErrors, validateApplication, getApplication);
-router.post('/application/:jobId', handleErrors, validateApplication, createApplication);
-router.delete('/application/:jobId', handleErrors, validateApplication, deleteApplication);
+router.get('/applications', helpers.handleErrors, helpers.getApplications);
+router.delete('/applications', helpers.handleErrors, helpers.deleteApplications);
+router.get('/application/:jobId', helpers.handleErrors, helpers.validateApplication, helpers.getApplication);
+router.post('/application/:jobId', helpers.handleErrors, helpers.validateApplication, helpers.createApplication);
+router.delete('/application/:jobId', helpers.handleErrors, helpers.validateApplication, helpers.deleteApplication);
 
 
 /**
  * Jobs endpoints
  */
-router.get('/alljobs', handleErrors, getAllJobs);
+router.get('/alljobs', helpers.handleErrors, helpers.getAllJobs);
 
 /**
  * Company endpoints
  */
-router.get('/companies', handleErrors, getAllCompanies) // ✔
-router.get('/company', companyValidationsGET, handleErrors, getCompanyInfo); // ✔
+router.get('/companies', helpers.handleErrors, helpers.getAllCompanies) // ✔
+router.get('/company', helpers.companyValidationsGET, helpers.handleErrors, helpers.getCompanyInfo); // ✔
 
-router.post('/company', companyValidationsPOST, handleErrors, isCEO, createCompany); // ✔
-router.put('/company', handleErrors, isCEO, updateCompanyInfo); // ✔
-router.delete('/company', handleErrors, isCEO, deleteCompany); // ✔
-
-
-router.post('/company/jobs', isEligible , jobValidationsPOST, handleErrors, createJob); // ✔
-router.put('/company/jobs', isEligible, handleErrors, updateJob); // ✔
-router.delete('/company/jobs', isEligible, handleErrors, jobValidationsGET, deleteJob);
-router.get('/company/jobs', handleErrors, jobValidationsGET, getCompanyJobs);
-router.get('/:companyName/:jobtitle', handleErrors, getJob);
+router.post('/company', helpers.companyValidationsPOST, helpers.handleErrors, helpers.isCEO, helpers.createCompany); // ✔
+router.put('/company', helpers.handleErrors, helpers.isCEO, helpers.updateCompanyInfo); // ✔
+router.delete('/company', helpers.handleErrors, helpers.isCEO, helpers.deleteCompany); // ✔
 
 
-router.get('company/employees', handleErrors, /*getCompanyEmployees*/);
-router.post('company/employees', handleErrors, /*addEmployee*/);
-router.put('company/employees', handleErrors, /*UpdateEmployeeInfo*/);
-router.delete('company/employees', handleErrors, /*deleteEmployee*/);
+router.post('/company/jobs', helpers.isEligible , helpers.jobValidationsPOST, helpers.handleErrors, helpers.createJob); // ✔
+router.put('/company/jobs', helpers.isEligible, helpers.handleErrors, helpers.updateJob); // ✔
+router.delete('/company/jobs', helpers.isEligible, helpers.handleErrors, helpers.jobValidationsGET, helpers.deleteJob); // ✔
+router.get('/company/jobs', helpers.handleErrors, helpers.jobValidationsGET, helpers.getCompanyJobs); // ✔
+router.get('/:companyName/:jobTitle', helpers.handleErrors, helpers.getJob); // ✔
+
+
+router.get('company/employees', helpers.handleErrors, /*getCompanyEmployees*/);
+router.post('company/employees', helpers.handleErrors, /*addEmployee*/);
+router.put('company/employees', helpers.handleErrors, /*UpdateEmployeeInfo*/);
+router.delete('company/employees', helpers.handleErrors, /*deleteEmployee*/);
 
 export default router;

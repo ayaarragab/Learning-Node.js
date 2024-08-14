@@ -90,7 +90,7 @@ export const getJob = async(request, response) => {
     const {companyName, jobTitle} = request.params;
     try {
         if (companyName && jobTitle) {
-            const job = Job.findOnd({compant: companyName, title: jobTitle});
+            const job = await Job.findOne({title: jobTitle, company: companyName});
             response.status(200).json({data:[job], success: true, message:`Job Here's job (${job.title})`});
         } else {
             response.status(200).json({data:[], success: false, message:`Invalid arguments`});
@@ -99,13 +99,19 @@ export const getJob = async(request, response) => {
         response.status(404).json({data:[], success: false, message:"Job not found"});
     }
 }
-
+/**
+ * request:
+ * {
+ *  "id": "" of
+ * }
+ */
 export const getCompanyJobs = async(req, res) => {
-    const {id} = req.params;
+    const {id} = req.body;
+    
     try {
-        const company = Company.findById({id: id});
+        const company = await Company.findById(id);
         if (company) {
-            const jobs = Job.find({company: company.name});
+            const jobs = await Job.find({company: company.name});
             if (jobs != []) {
                 res.status(200).json({data:[jobs], success: true, message:`Here're all the jobs of ${company.name} company`});
             }
@@ -116,7 +122,9 @@ export const getCompanyJobs = async(req, res) => {
             res.status(404).json({data:[], success: false, message: "company not found"});
         }
     } catch (error) {
-        res.status(200).json({data:[], success: false, message:`Error in getting the company`});        
+        console.log(error);
+        
+        res.status(500).json({data:[], success: false, message:`Error in getting the company`});        
     }
 }
 
