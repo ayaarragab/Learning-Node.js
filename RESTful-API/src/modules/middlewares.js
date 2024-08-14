@@ -12,8 +12,6 @@ export const handleErrors = (request, response, next) => {
 }
 
 export const isEligible = async(req, res, next) => {
-    req.user.professional_title = 'HR';
-    req.user.companyName = 'Quinn LLC';
     if (req.user.companyName === "N/A")
     {
         res.status(401).json({data:[], success: false, message: "You're not Eligible to post a job"});
