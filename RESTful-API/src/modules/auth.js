@@ -40,7 +40,6 @@ export const protect = async(req, res, next) => {
       req.user = user;
       next(); // now anything in the stack will know req.user 
     } catch (error) {
-        console.log("error!!!!!!!!!!");
         res.status(401);
         res.json({message: "Not valid token"});
         return;

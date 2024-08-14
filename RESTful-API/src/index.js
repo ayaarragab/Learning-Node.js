@@ -8,4 +8,4 @@ const db = new DBconnection();
 
 db.connect();
 
-app.listen(3001, () => console.log("Hello Ayoya"));
+app.listen(3001, () => console.log("Hello User!"));

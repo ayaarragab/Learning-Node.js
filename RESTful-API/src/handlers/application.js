@@ -1,6 +1,4 @@
 import Job from "../../models/job.js";
-import { Company } from "../../models/company.js";
-import User from "../../models/user.js";
 import Application from "../../models/application.js";
 
 export const getApplications = async(request, response) => {
@@ -10,9 +8,7 @@ export const getApplications = async(request, response) => {
         try {
             const userApplications = await Application.find({ applicant: user.id });
             response.status(200).json(userApplications);
-        } catch (error) {
-            console.log(error);
-            
+        } catch (error) {            
             response.status(500).json({message: "Server issue"});
         }
     } catch (error) {
@@ -28,7 +24,6 @@ export const deleteApplications = async(request, response) => {
             await Application.deleteMany({ applicant: user.id });
             response.status(200).json({message: "Your applications have been canceled"});
         } catch (error) {
-            console.log(error);
             response.status(500).json({message: "Server issue"});
         }
     } catch (error) {
@@ -83,9 +78,7 @@ export const createApplication = async (req, res) => { // **** DONE ****
         application.save();
         const dataToBeSent = {application, jobTitle: job.title}
         res.status(200).json({dataToBeSent, message: `You successfully applied to ${job.title} position`});
-    } catch (error) {
-        console.log(error);
-        
+    } catch (error) {        
         res.status(500).json({ error: 'Failed to create application' });
     }
 }

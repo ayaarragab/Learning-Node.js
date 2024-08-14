@@ -15,7 +15,6 @@ export const getCompanyInfo = async(req, res) => {
     else
       res.status(200).json({data:company, success: true, message:`Here's ${company.name} information`});
   } catch (error) {
-    console.log(error);
     
     res.status(501).json({data:[], success: false, message:"Error occured while searching for the company"});
   }
@@ -44,7 +43,17 @@ export const createCompany = async(req, res) => {
   }  
 }
 
-// issue in logic
+/**
+ * Request format
+ * {
+    name: "",
+    update: {
+    name:"",
+    ...
+    }
+* }
+ */
+
 export const updateCompanyInfo = async (req, res) => {
     const toUpdate = ['location', 'employees', 'name'];
     const updateData = {};
@@ -68,7 +77,6 @@ export const updateCompanyInfo = async (req, res) => {
 
         res.status(200).json({ data: [updatedCompany], success: true, message: "Your company's info updated successfully" });
     } catch (error) {
-        console.error('Error updating company info:', error);
         res.status(500).json({ success: false, message: 'Failed to update company information.' });
     }
 };
@@ -84,9 +92,7 @@ export const deleteCompany = async(req, res) => {
       await company.deleteOne();
       res.status(200).json({data:[], success: true, message:`$Company ${company.name} deleted`});
     }
-  } catch (error) {
-    console.log(error);
-    
+  } catch (error) {    
     res.status(501).json({data:[], success: false, message:"Error occured while searching for the company"});
   }
 }

@@ -30,7 +30,6 @@ export const signin = async (req, res) => {
   try {
     // Find the user by email
     const user = await User.findOne({ email: req.body.email });
-    console.log(user.isCEO);
     
     if (!user) {
       res.status(401).json({ message: 'Invalid credentials' });
@@ -49,7 +48,6 @@ export const signin = async (req, res) => {
     const token = createJWT(user); // Assuming you have a createJWT function
     res.json({ token });
   } catch (error) {
-    console.error("Error during sign-in:", error);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
@@ -59,7 +57,6 @@ export const retrieveAllUsers = async (request, response) => {
     const users = await User.find({});
     response.json(users);
   } catch (error) {
-    console.error(error);
     response.status(500).json({ message: 'Error fetching users' });
   }
 }

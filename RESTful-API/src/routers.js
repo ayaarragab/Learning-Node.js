@@ -5,7 +5,7 @@
 import Router from "express";
 import { handleErrors, validateApplication, isEligible, isCEO } from "./modules/middlewares.js";
 import { body } from "express-validator";
-import {getAllJobs, jobValidations, createJob} from "./handlers/job.js";
+import {getAllJobs, jobValidationsGET, jobValidationsPOST, createJob, updateJob, deleteJob, getJob} from "./handlers/job.js";
 import { retrieveUser, retrieveAllUsers } from "./handlers/user.js";
 import { getApplications, deleteApplications, getApplication, createApplication, deleteApplication } from "./handlers/application.js";
 import { getCompanyInfo, companyValidationsGET, getAllCompanies, createCompany, companyValidationsPOST, updateCompanyInfo, deleteCompany } from "./handlers/company.js";
@@ -46,11 +46,10 @@ router.put('/company', handleErrors, isCEO, updateCompanyInfo); // ✔
 router.delete('/company', handleErrors, isCEO, deleteCompany); // ✔
 
 
-router.post('/company/jobs', isEligible , jobValidations, handleErrors, createJob); // ✔
-
-router.put('/company/jobs', handleErrors, /*updateJob*/);
-router.delete('/company/jobs', handleErrors, /*deleteJob*/);
-router.get('/company/jobs', handleErrors, /*getCompanyJobs*/);
+router.post('/company/jobs', isEligible , jobValidationsPOST, handleErrors, createJob); // ✔
+router.put('/company/jobs', isEligible, handleErrors, updateJob); // ✔
+router.delete('/company/jobs', isEligible, handleErrors, /*deleteJob*/);
+router.get('/company/jobs', isEligible, handleErrors, /*getCompanyJobs*/);
 
 router.get('company/employees', handleErrors, /*getCompanyEmployees*/);
 router.post('company/employees', handleErrors, /*addEmployee*/);

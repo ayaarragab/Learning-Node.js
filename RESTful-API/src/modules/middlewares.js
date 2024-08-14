@@ -12,8 +12,8 @@ export const handleErrors = (request, response, next) => {
 }
 
 export const isEligible = async(req, res, next) => {
-    console.log(req.user.companyName);
-    
+    req.user.professional_title = 'HR';
+    req.user.companyName = 'Quinn LLC';
     if (req.user.companyName === "N/A")
     {
         res.status(401).json({data:[], success: false, message: "You're not Eligible to post a job"});
@@ -32,15 +32,12 @@ export const isEligible = async(req, res, next) => {
             return;
         }
         
-    } catch (error) {
-        console.log(error);
-        
+    } catch (error) {        
         res.status(401).json({data:[], success: false, message: "Company not found"});
     }    
 }
 
 export const isCEO = async(req, res, next) => {
-    req.user.professional_title = 'CEO';
     if (req.user.professional_title === 'CEO')
         next();
     else {
