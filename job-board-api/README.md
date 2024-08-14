@@ -243,9 +243,6 @@ To obtain a token, use the /register endpoint with valid credentials.
   }
 
   ```
-
-  ```
-
 #### 2\. Create Job
 
 - **Endpoint:** `POST /company/jobs`
@@ -274,8 +271,6 @@ To obtain a token, use the /register endpoint with valid credentials.
 
   ```
 
-  ```
-
 #### 3\. Update Job
 
 - **Endpoint:** `PUT /company/jobs`
@@ -292,12 +287,13 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** Job not found.
 - **Example Response:**
 
-  json
-  `{
+  json ```
+  {
     "data": [...],
     "success": true,
     "message": "Your job's info updated successfully."
-}`
+  }
+  ```
 
 #### 4\. Delete Job
 
