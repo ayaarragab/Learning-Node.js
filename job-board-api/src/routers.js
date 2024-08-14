@@ -43,6 +43,6 @@ router.get('/:companyName/:jobTitle', helpers.handleErrors, helpers.getJob);
 
 
 router.get('/employees/company/:companyname', helpers.handleErrors, helpers.getCompanyEmployees);
-router.delete('/:companyName/employees', helpers.body('employeeId') , helpers.handleErrors, helpers.deleteEmployee);
+router.delete('/:companyName/employees', helpers.isCEO ,helpers.body('employeeId') , helpers.handleErrors, helpers.deleteEmployee);
 
 export default router;

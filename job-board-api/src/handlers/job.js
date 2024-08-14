@@ -27,7 +27,7 @@ const createJob = async(request, response) => {
             company
         });
         job.save();
-        response.status(200).json({ success: true, message: "Job created successfully" });
+        response.status(200).json({ data:[job], success: true, message: "Job created successfully" });
         
     } catch (error) {
         
