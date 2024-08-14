@@ -42,7 +42,7 @@ router.get('/company/jobs', helpers.handleErrors, helpers.jobValidationsGET, hel
 router.get('/:companyName/:jobTitle', helpers.handleErrors, helpers.getJob);
 
 
-router.get(':companyName/employees', helpers.handleErrors, /*getCompanyEmployees*/);
-router.delete(':companyName/employees', helpers.handleErrors, /*deleteEmployee*/);
+router.get('/employees/company/:companyname', helpers.handleErrors, helpers.getCompanyEmployees);
+router.delete('/:companyName/employees', helpers.body('employeeId') , helpers.handleErrors, helpers.deleteEmployee);
 
 export default router;

@@ -1,5 +1,6 @@
 import {Company} from "../../models/company.js";
 import { body } from "express-validator";
+import User from "../../models/user.js";
 
 /*
  * Handlers 
@@ -97,6 +98,32 @@ export const deleteCompany = async(req, res) => {
   }
 }
 
+export const getCompanyEmployees = async(req, res) => {
+  try {    
+    const employees = await User.find({companyName: req.params.companyname});
+    if (employees[0]) {
+      res.status(200).json({data:employees, success: true, message:`Here're all employees in ${req.params.companyname} company`});
+    }
+    else {
+      res.status(200).json({data:[], success: true, message:`No employees in ${req.params.companyname} company`});
+    }
+  } catch (error) {
+    res.status(500).json({data:[], success: false, message:`Error occured while loading ${req.params.companyname} company employees`});    
+  }
+}
+
+
+export const deleteEmployee = async(req, res) => {
+  try {
+    const employee = await User.findById(req.body.employeeId);
+    if (employee.companyName === req.params.companyName) {
+      await employee.updateOne({companyName: "N/A"});
+      res.status(200).json({data:[], success:true, message: `Employee removed from ${req.params.companyName} company`});
+    }
+  } catch (error) {
+    res.status(500).json({data:[], success:false, message: `Cannot remove this employee`});
+  }
+}
 
 /*
  * Validations

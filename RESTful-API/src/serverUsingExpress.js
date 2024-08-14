@@ -6,7 +6,6 @@ import cors from "cors";
 import {protect} from "./modules/auth.js";
 import * as handlers from "./handlers/user.js";
 
-
 const app = express();
 
 app.use(cors());
