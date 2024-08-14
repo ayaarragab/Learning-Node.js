@@ -2,3 +2,4 @@
 .env
 /mock_data
 put_data.js
+notes.js
