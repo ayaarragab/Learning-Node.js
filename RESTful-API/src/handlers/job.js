@@ -21,14 +21,8 @@ const getAllJobs = async (request, response) => {
 
 const createJob = async(request, response) => {
     const { title, description, requirements, location, salary, company } = request.body;
-
+    
     try {
-        const companyExists = await Company.findOne({ name: company });
-    
-        if (!companyExists) {
-            return response.status(404).json({ success: false, message: "Please enter a valid company" });
-        }
-    
         const job = await Job.create({
             title,
             description,
@@ -41,7 +35,8 @@ const createJob = async(request, response) => {
         response.status(200).json({ success: true, message: "Job created successfully" });
         
     } catch (error) {
-        console.error(error);
+        
+        
         response.status(500).json({ success: false, message: "An error occurred while creating the job" });
     }
 }

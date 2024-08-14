@@ -3,12 +3,12 @@
    middleware (check serverUsingExpress.js and handlers.js)
 */
 import Router from "express";
-import { handleErrors, validateApplication, onlyForCEO } from "./modules/middlewares.js";
+import { handleErrors, validateApplication, isEligible, isCEO } from "./modules/middlewares.js";
 import { body } from "express-validator";
 import {getAllJobs, jobValidations, createJob} from "./handlers/job.js";
 import { retrieveUser, retrieveAllUsers } from "./handlers/user.js";
 import { getApplications, deleteApplications, getApplication, createApplication, deleteApplication } from "./handlers/application.js";
-import { getCompanyInfo, companyValidations, getAllCompanies } from "./handlers/company.js";
+import { getCompanyInfo, companyValidationsGET, getAllCompanies, createCompany, companyValidationsPOST, updateCompanyInfo, deleteCompany } from "./handlers/company.js";
 
 
 const router = Router();
@@ -34,23 +34,23 @@ router.delete('/application/:jobId', handleErrors, validateApplication, deleteAp
  * Jobs endpoints
  */
 router.get('/alljobs', handleErrors, getAllJobs);
-// will be ommitted, company/job instead
-router.post('/jobs', onlyForCEO, handleErrors , jobValidations, createJob);
-
 
 /**
  * Company endpoints
  */
 router.get('/companies', handleErrors, getAllCompanies) // ✔
-router.get('/company', companyValidations, handleErrors, getCompanyInfo); // ✔
-router.post('/company', handleErrors, /*createCompany*/);
-router.put('/company', handleErrors, /*updateCompanyInfo*/);
-router.delete('/company', handleErrors, /*deleteCompany*/);
+router.get('/company', companyValidationsGET, handleErrors, getCompanyInfo); // ✔
 
-router.get('/company/jobs', handleErrors, /*getCompanyJobs*/);
-router.post('/company/jobs', handleErrors, createJob);
+router.post('/company', companyValidationsPOST, handleErrors, isCEO, createCompany); // ✔
+router.put('/company', handleErrors, isCEO, updateCompanyInfo); // ✔
+router.delete('/company', handleErrors, isCEO, deleteCompany); // ✔
+
+
+router.post('/company/jobs', isEligible , jobValidations, handleErrors, createJob); // ✔
+
 router.put('/company/jobs', handleErrors, /*updateJob*/);
 router.delete('/company/jobs', handleErrors, /*deleteJob*/);
+router.get('/company/jobs', handleErrors, /*getCompanyJobs*/);
 
 router.get('company/employees', handleErrors, /*getCompanyEmployees*/);
 router.post('company/employees', handleErrors, /*addEmployee*/);

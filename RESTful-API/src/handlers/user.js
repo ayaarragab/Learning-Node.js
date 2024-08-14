@@ -14,10 +14,12 @@ export const createUser = async (req, res) => {
     return;
   }  
   const user = await User.create({
-        name: req.body.name,
+        fullName: req.body.fullName,
         email: req.body.email,
         password: await hashPassword(req.body.password),
-        isCEO: req.body.isCEO
+        status: req.body.status,
+        professional_title: req.body.professional_title,
+        companyName: req.body.companyName
     });
     const token = createJWT(user);
     res.json({token}); // {token} === {token: token}
