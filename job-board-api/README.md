@@ -363,7 +363,6 @@ To obtain a token, use the /register endpoint with valid credentials.
 ---
 
 ### Applications Routes
-Application Routes
 ------------------
 
 #### Get All Applications for a User
@@ -374,6 +373,51 @@ Application Routes
     -   **200 OK:** Returns an array of the user's applications.
     -   **500 Internal Server Error:** Returns a message indicating a server issue.
     -   **401 Unauthorized:** Returns a message if the user is not signed in.
+     -   **Example Response**
+          -  *200 OK*
+            ``` json
+            {
+                "data": [
+                    {
+                        "jobId": "12345",
+                        "jobTitle": "Software Engineer",
+                        "company": "Tech Corp",
+                        "status": "submitted",
+                        "submittedAt": "2024-01-01T12:00:00Z",
+                        "resume": "URL to resume",
+                        "coverLetter": "URL to cover letter"
+                    },
+                    {
+                        "jobId": "67890",
+                        "jobTitle": "Product Manager",
+                        "company": "Innovate Inc",
+                        "status": "in review",
+                        "submittedAt": "2024-02-01T12:00:00Z",
+                        "resume": "URL to resume",
+                        "coverLetter": "URL to cover letter"
+                    }
+                ],
+                "success": true,
+                "message": "Here're your applications"
+            }
+
+              ```
+          - *500 Internal Server Error*
+          ```json
+          {
+          "data": [],
+          "success": false,
+          "message": "Server issue"
+          }
+          ```
+        - *401 Unauthorized:*
+        ```json
+        {
+          "data": [],
+          "success": false,
+          "message": "Please signin or register first"
+        }
+        ```
 
 #### Delete All Applications for a User
 
@@ -383,7 +427,40 @@ Application Routes
     -   **200 OK:** Returns a message confirming the deletion of all applications.
     -   **500 Internal Server Error:** Returns a message indicating a server issue.
     -   **401 Unauthorized:** Returns a message if the user is not signed in.
-
+-   **Example Response**
+        - *200 OK*
+        ``` json
+        {
+        "data": [],
+        "success": true,
+        "message": "Your applications have been canceled"
+        }
+        ```
+      - **500 Internal Server Error**
+      ``` json
+      {
+          "data": [],
+          "success": false,
+          "message": "Server issue"
+      }
+      ```
+      - **401 Unauthorized**
+      ``` json
+      {
+          "data": [],
+          "success": false,
+          "message": "Please signin or register first"
+      }
+      ```
+      - **500 Internal server error**
+      ```json
+      {
+          "data": [],
+          "success": false,
+          "message": "Failed to create application"
+      }
+      ```
+    
 #### Get a Specific Application
 
 -   **Endpoint:** `GET /application/:jobId`
@@ -394,6 +471,44 @@ Application Routes
     -   **200 OK:** Returns the application details and a message if the application exists.
     -   **400 Bad Request:** Returns a message if the application was not found or was deleted.
     -   **404 Not Found:** Returns a message if the job does not exist.
+-   **Example Response**
+        - *200 OK*
+        ``` json
+        {
+            "data": [
+                {
+                    "jobId": "12345",
+                    "jobTitle": "Software Engineer",
+                    "company": "Tech Corp",
+                    "status": "submitted",
+                    "submittedAt": "2024-01-01T12:00:00Z",
+                    "resume": "URL to resume",
+                    "coverLetter": "URL to cover letter"
+                }
+            ],
+            "success": true,
+            "message": "Here's your application in Software Engineer"
+        }
+
+        ```
+
+      - **400 Bad request**
+      ``` json
+      {
+          "data": [],
+          "success": false,
+          "message": "You didn't apply for the Software Engineer position or you may have deleted it"
+      }
+
+      ```
+      - **500 Internal server error**
+      ```json
+      {
+          "data": [],
+          "success": false,
+          "message": "Failed to create application"
+      }
+      ```
 
 #### Create a New Application
 
@@ -408,7 +523,50 @@ Application Routes
     -   **200 OK:** Returns the created application details and a success message.
     -   **404 Not Found:** Returns a message if the job or user is not found.
     -   **500 Internal Server Error:** Returns a message if the application could not be created.
+- *Request Example*:
+  ```json
+  {
+      "resume": "URL to the resume or the resume content as a string",
+      "coverLetter": "URL to the cover letter or the cover letter content as a string"
+  }
 
+  ```
+- *response Example*:
+  - *200 OK*
+  ```json
+    {
+      "data": [
+          {
+              "application": {
+                  "applicant": "User ID",
+                  "resume": "URL to resume",
+                  "coverLetter": "URL to cover letter",
+                  "job": "Job ID",
+                  "status": "pending"
+              },
+              "jobTitle": "Software Engineer"
+          }
+      ],
+      "success": true,
+      "message": "You successfully applied to Software Engineer position"
+  }
+  ```
+  - *404 Not found*
+  ```json
+  {
+        "data": [],
+        "success": false,
+        "message": "Job not found"
+  }
+  ```
+  - *500 Internal Server Error*
+  ```json
+    {
+        "data": [],
+        "success": false,
+        "message": "Failed to create application"
+    }
+  ```
 #### Delete a Specific Application
 
 -   **Endpoint:** `DELETE /application/:jobId`
@@ -417,8 +575,29 @@ Application Routes
     -   **jobId** (in URL): The ID of the job for which the application was submitted.
 -   **Response:**
     -   **200 OK:** Returns a message confirming the deletion of the application.
+    ```json
+    {
+    "data": [],
+    "success": true,
+    "message": "Your application in Software Engineer has been deleted"
+    }
+    ```
     -   **400 Bad Request:** Returns a message if the application was not found or was deleted.
+    ```json
+    {
+    "data": [],
+    "success": false,
+    "message": "You didn't apply for the Software Engineer position"
+    }
+    ```
     -   **404 Not Found:** Returns a message if the job does not exist.
+    ```json
+    {
+    "data": [],
+    "success": false,
+    "message": "This job doesn't exist"
+    }
+    ```
 
 ### Employee Routes
 

@@ -1,12 +1,6 @@
 import User from "../../models/user.js";
 import {hashPassword, createJWT, comparePasswords} from "../modules/auth.js";
 
-/**
- * talking to a database is asyncronus like talking to the network,
- * and most DBs now are servers too, not just a disk, another reason for being asyncronus
- * @param {*} req 
- * @param {*} res 
- */
 export const createUser = async (req, res) => {
   const isExist = await User.findOne({email: req.body.email});
   if (isExist) {
@@ -67,4 +61,3 @@ export const retrieveUser = async(req, res) => {
       response.json(isExist);
   }
 }
-// in bycrbt, you have 2 options, to do compareSync, that not retrn proimes
