@@ -362,6 +362,64 @@ To obtain a token, use the /register endpoint with valid credentials.
 
 ---
 
+### Applications Routes
+Application Routes
+------------------
+
+#### Get All Applications for a User
+
+-   **Endpoint:** `GET /applications`
+-   **Description:** Retrieve all job applications submitted by the authenticated user.
+-   **Response:**
+    -   **200 OK:** Returns an array of the user's applications.
+    -   **500 Internal Server Error:** Returns a message indicating a server issue.
+    -   **401 Unauthorized:** Returns a message if the user is not signed in.
+
+#### Delete All Applications for a User
+
+-   **Endpoint:** `DELETE /applications`
+-   **Description:** Delete all job applications submitted by the authenticated user.
+-   **Response:**
+    -   **200 OK:** Returns a message confirming the deletion of all applications.
+    -   **500 Internal Server Error:** Returns a message indicating a server issue.
+    -   **401 Unauthorized:** Returns a message if the user is not signed in.
+
+#### Get a Specific Application
+
+-   **Endpoint:** `GET /application/:jobId`
+-   **Description:** Retrieve a specific job application by job ID for the authenticated user.
+-   **Parameters:**
+    -   **jobId** (in URL): The ID of the job for which the application was submitted.
+-   **Response:**
+    -   **200 OK:** Returns the application details and a message if the application exists.
+    -   **400 Bad Request:** Returns a message if the application was not found or was deleted.
+    -   **404 Not Found:** Returns a message if the job does not exist.
+
+#### Create a New Application
+
+-   **Endpoint:** `POST /application/:jobId`
+-   **Description:** Submit a new application for a job.
+-   **Parameters:**
+    -   **jobId** (in URL): The ID of the job to apply for.
+-   **Request Body:**
+    -   **resume** (string): The applicant's resume.
+    -   **coverLetter** (string): The applicant's cover letter.
+-   **Response:**
+    -   **200 OK:** Returns the created application details and a success message.
+    -   **404 Not Found:** Returns a message if the job or user is not found.
+    -   **500 Internal Server Error:** Returns a message if the application could not be created.
+
+#### Delete a Specific Application
+
+-   **Endpoint:** `DELETE /application/:jobId`
+-   **Description:** Delete a specific job application by job ID for the authenticated user.
+-   **Parameters:**
+    -   **jobId** (in URL): The ID of the job for which the application was submitted.
+-   **Response:**
+    -   **200 OK:** Returns a message confirming the deletion of the application.
+    -   **400 Bad Request:** Returns a message if the application was not found or was deleted.
+    -   **404 Not Found:** Returns a message if the job does not exist.
+
 ### Employee Routes
 
 ---
