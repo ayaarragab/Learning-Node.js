@@ -1,3 +1,4 @@
+import { Company } from "../../models/company.js";
 import Job from "../../models/job.js";
 import { body } from "express-validator";
 /**
@@ -75,11 +76,48 @@ export const updateJob = async(req, res) => {
 }
 
 export const deleteJob = async(request, response) => {
-
+    const {id} = request.body;
+    try {
+        const job = Job.findById(id);
+        job.deleteOne();
+        response.status(200).json({data:[], success: true, message:"Job deleted successfully"});
+    } catch (error) {
+        response.status(404).json({data:[], success: false, message:"Job not found"});
+    }
 }
 
 export const getJob = async(request, response) => {
+    const {companyName, jobTitle} = request.params;
+    try {
+        if (companyName && jobTitle) {
+            const job = Job.findOnd({compant: companyName, title: jobTitle});
+            response.status(200).json({data:[job], success: true, message:`Job Here's job (${job.title})`});
+        } else {
+            response.status(200).json({data:[], success: false, message:`Invalid arguments`});
+        }
+    } catch (error) {
+        response.status(404).json({data:[], success: false, message:"Job not found"});
+    }
+}
 
+export const getCompanyJobs = async(req, res) => {
+    const {id} = req.params;
+    try {
+        const company = Company.findById({id: id});
+        if (company) {
+            const jobs = Job.find({company: company.name});
+            if (jobs != []) {
+                res.status(200).json({data:[jobs], success: true, message:`Here're all the jobs of ${company.name} company`});
+            }
+            else {
+                res.status(200).json({data:[], success: false, message:`There's no available jobs in ${company.name}`});
+            }
+        } else {
+            res.status(404).json({data:[], success: false, message: "company not found"});
+        }
+    } catch (error) {
+        res.status(200).json({data:[], success: false, message:`Error in getting the company`});        
+    }
 }
 
 /**
