@@ -262,14 +262,12 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **400 Bad Request:** Invalid request data.
 - **Example Response:**
 
-  json ```
-  {
+  json`{
   "data": [...],
   "success": true,
   "message": "Job created successfully."
   }
-
-  ```
+  `
 
 #### 3\. Update Job
 
