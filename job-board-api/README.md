@@ -209,13 +209,14 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** The company was not found.
 - **Example Response:**
 
-  json
+  ```json
 
-  `{
+  {
     "data": [],
     "success": true,
     "message": "Company deleted successfully."
-}`
+  }
+```
 
 ---
 
@@ -235,14 +236,15 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** No jobs found for the company.
 - **Example Response:**
 
-  json ```
+  ```json 
+
   {
   "data": [...],
   "success": true,
   "message": "Here're all the jobs of [company name] company."
   }
-
   ```
+
 #### 2\. Create Job
 
 - **Endpoint:** `POST /company/jobs`
@@ -262,12 +264,13 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **400 Bad Request:** Invalid request data.
 - **Example Response:**
 
-  json`{
+  ```json
+  {
   "data": [...],
   "success": true,
   "message": "Job created successfully."
   }
-  `
+  ```
 
 #### 3\. Update Job
 
@@ -285,7 +288,7 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** Job not found.
 - **Example Response:**
 
-  json ```
+  ```json
   {
     "data": [...],
     "success": true,
@@ -307,13 +310,14 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** Job not found.
 - **Example Response:**
 
-  json
+  ```json
 
-  `{
+  {
     "data": [],
     "success": true,
     "message": "Job deleted successfully."
-}`
+  }
+  ```
 
 #### 5\. Get Job
 
@@ -328,14 +332,14 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** Job not found.
 - **Example Response:**
 
-  json
+  ```json
 
-  `{
+  {
     "data": [...],
     "success": true,
     "message": "Here's job ([job title])."
-}`
-
+  }
+  ```
 #### 6\. Get Company Jobs
 
 - **Endpoint:** `GET /company/jobs`
@@ -348,13 +352,13 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** Company or jobs not found.
 - **Example Response:**
 
-  json
-
-  `{
+  ```json
+    {
     "data": [...],
     "success": true,
     "message": "Here're all the jobs of [company name] company."
-}`
+    }
+    ```
 
 ---
 
@@ -374,12 +378,13 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** Company or employees not found.
 - **Example Response:**
 
-  json
-  `{
+  ```json
+    {
     "data": [...],
     "success": true,
     "message": "Here are the employees of [company name]."
-}`
+    }
+```
 
 #### 2\. Delete Employee
 
@@ -397,14 +402,13 @@ To obtain a token, use the /register endpoint with valid credentials.
   - **404 Not Found:** Employee not found.
 - **Example Response:**
 
-  json
-
-  `{
-    "data": [],
+  ```json
+  {
+   "data": [],
     "success": true,
     "message": "Employee deleted successfully."
-}`
-
+  }
+```
 ---
 
 ## Notes
